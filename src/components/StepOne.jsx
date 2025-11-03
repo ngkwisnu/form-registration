@@ -2,6 +2,7 @@ import InputField from "./InputField";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 
 export default function StepOne({ data, onUpdate }) {
+  
   const handleChange = (field, value) => {
     onUpdate({ [field]: value });
   };
@@ -44,7 +45,7 @@ export default function StepOne({ data, onUpdate }) {
         Contract Assignment
       </h3>
       <label className="block mb-3 text-xs font-medium text-gray-700">
-        Upload file
+        Upload file <span className="text-red-500">*</span>
       </label>
       <div className="flex items-center w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-xs">
         <ArrowUpTrayIcon className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />

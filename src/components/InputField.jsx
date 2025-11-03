@@ -2,7 +2,7 @@ export default function InputField({ label, type = "text", placeholder, ...props
   return (
     <div>
       <label className="block mb-3 text-xs font-medium text-gray-700 dark:text-white">
-        {label}
+        {label} <span className="text-red-500">*</span>
       </label>
       {type === "textarea" ? (
         <textarea

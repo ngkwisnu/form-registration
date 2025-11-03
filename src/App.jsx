@@ -88,6 +88,32 @@ export default function App() {
     }
   };
 
+  // 🔹 Fungsi untuk validasi step 1 & 2
+  const validateStep = (step) => {
+    if (step === 1) {
+      const { propertyName, numberOfRooms, description, file } =
+        formData.stepOne;
+      if (!propertyName || !numberOfRooms || !description || !file) {
+        alert(
+          "Please fill in all required fields (*) in Step 1 before continuing."
+        );
+        return false;
+      }
+    }
+
+    if (step === 2) {
+      const { roomImages, logoImages } = formData.stepTwo;
+      if (roomImages.length === 0 || logoImages.length === 0) {
+        alert(
+          "Please upload at least one Room Image and one Logo Image before continuing."
+        );
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
     <>
       {currentStep > 3 ? (
@@ -152,8 +178,14 @@ export default function App() {
               <button
                 disabled={loading}
                 onClick={() => {
-                  if (currentStep === 3) handleSubmit();
-                  else setCurrentStep(currentStep + 1);
+                  if (currentStep === 3) {
+                    handleSubmit();
+                  } else {
+                    // Cek validasi sebelum lanjut step berikutnya
+                    if (validateStep(currentStep)) {
+                      setCurrentStep(currentStep + 1);
+                    }
+                  }
                 }}
                 className={`mt-6 w-full font-medium py-2.5 rounded-lg transition ${
                   loading

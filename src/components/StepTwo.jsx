@@ -30,7 +30,7 @@ export default function PropertyImagesForm({ data, onUpdate }) {
 
       {/* Room Images */}
       <label className="block mb-3 text-xs font-medium text-gray-700">
-        Room Images
+        Room Images <span className="text-red-500">*</span>
       </label>
       <div
         className="flex items-center w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-xs"
@@ -60,7 +60,7 @@ export default function PropertyImagesForm({ data, onUpdate }) {
 
       {/* Logo Images */}
       <label className="block mb-3 text-xs font-medium text-gray-700">
-        Property Logo
+        Property Logo <span className="text-red-500">*</span>
       </label>
       <div
         className="flex items-center w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-xs"
