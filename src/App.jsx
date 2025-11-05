@@ -14,7 +14,8 @@ export default function App() {
     stepOne: {
       propertyName: "",
       numberOfRooms: "",
-      description: "",
+      reservationEmail: "",
+      financeEmail: "",
       file: null,
     },
     stepTwo: {
@@ -65,7 +66,7 @@ export default function App() {
 
       // Kirim ke Apps Script
       const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbxdcdCw9EweaxAwbXwFk2Jlr9QNNSUmEgwXuWEwJggPfBIuqv2pio_-v89K0UYfwDjPGw/exec",
+        "https://script.google.com/macros/s/AKfycbwAOQ76AsbZWC2QVeaLJMXobtRt8FxnuIUlEiZ0dy4V45j47Jx3fAgc4-7zbQt62IVi2w/exec",
         {
           method: "POST",
           // headers: { "Content-Type": "application/json" },
@@ -91,21 +92,115 @@ export default function App() {
   // 🔹 Fungsi untuk validasi step 1 & 2
   const validateStep = (step) => {
     if (step === 1) {
-      const { propertyName, numberOfRooms, description, file } =
-        formData.stepOne;
-      if (!propertyName || !numberOfRooms || !description || !file) {
+      const {
+        propertyName,
+        numberOfRooms,
+        reservationEmail,
+        financeEmail,
+        file,
+      } = formData.stepOne || {};
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const errors = [];
+
+      // Property name
+      if (!propertyName || !propertyName.toString().trim()) {
+        errors.push("Property Name is required.");
+      }
+
+      // Number of rooms: must be a positive integer
+      const rooms = Number(numberOfRooms);
+      if (
+        !numberOfRooms ||
+        isNaN(rooms) ||
+        !Number.isFinite(rooms) ||
+        rooms <= 0
+      ) {
+        errors.push(
+          "Number of Rooms is required and must be a positive number."
+        );
+      }
+
+      // Reservation email
+      if (!reservationEmail || !reservationEmail.toString().trim()) {
+        errors.push("Reservation Email is required.");
+      } else if (!emailRegex.test(reservationEmail.toString().trim())) {
+        errors.push("Reservation Email is not a valid email address.");
+      }
+
+      // Finance email
+      if (!financeEmail || !financeEmail.toString().trim()) {
+        errors.push("Finance Email is required.");
+      } else if (!emailRegex.test(financeEmail.toString().trim())) {
+        errors.push("Finance Email is not a valid email address.");
+      }
+
+      // File: must exist and be a PDF
+      if (!file) {
+        errors.push("Contract file (PDF) is required.");
+      } else {
+        const isPdf =
+          (file.type && file.type === "application/pdf") ||
+          (file.name && file.name.toLowerCase().endsWith(".pdf"));
+        if (!isPdf) {
+          errors.push("Contract file must be a PDF.");
+        }
+      }
+
+      if (errors.length > 0) {
+        // Tampilkan semua error sekaligus agar user tahu apa yang harus diperbaiki
         alert(
-          "Please fill in all required fields (*) in Step 1 before continuing."
+          "Please fix the following errors:\n\n" +
+            errors.map((e) => `- ${e}`).join("\n")
         );
         return false;
       }
     }
 
     if (step === 2) {
-      const { roomImages, logoImages } = formData.stepTwo;
-      if (roomImages.length === 0 || logoImages.length === 0) {
+      const { roomImages = [], logoImages = [] } = formData.stepTwo || {};
+      const errors = [];
+
+      // Allowed image mime types
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+      ];
+
+      // Check room images
+      if (roomImages.length === 0) {
+        errors.push("Please upload at least one Room Image.");
+      } else {
+        const invalidRooms = roomImages.filter(
+          (file) => !allowedTypes.includes(file.type)
+        );
+        if (invalidRooms.length > 0) {
+          errors.push(
+            "Room Images must be in image format (jpg, png, webp, gif)."
+          );
+        }
+      }
+
+      // Check logo images
+      if (logoImages.length === 0) {
+        errors.push("Please upload at least one Logo Image.");
+      } else {
+        const invalidLogos = logoImages.filter(
+          (file) => !allowedTypes.includes(file.type)
+        );
+        if (invalidLogos.length > 0) {
+          errors.push(
+            "Logo Images must be in image format (jpg, png, webp, gif)."
+          );
+        }
+      }
+
+      if (errors.length > 0) {
         alert(
-          "Please upload at least one Room Image and one Logo Image before continuing."
+          "Please fix the following:\n\n" +
+            errors.map((e) => `- ${e}`).join("\n")
         );
         return false;
       }

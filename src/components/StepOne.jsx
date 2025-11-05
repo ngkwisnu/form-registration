@@ -2,7 +2,6 @@ import InputField from "./InputField";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 
 export default function StepOne({ data, onUpdate }) {
-  
   const handleChange = (field, value) => {
     onUpdate({ [field]: value });
   };
@@ -27,9 +26,23 @@ export default function StepOne({ data, onUpdate }) {
           value={data.numberOfRooms}
           onChange={(e) => handleChange("numberOfRooms", e.target.value)}
         />
+        <InputField
+          label="Reservation Email"
+          type="email"
+          placeholder="reservation@example.com"
+          value={data.reservationEmail}
+          onChange={(e) => handleChange("reservationEmail", e.target.value)}
+        />
+        <InputField
+          type="email"
+          label="Finance Email"
+          placeholder="finance@example.com"
+          value={data.financeEmail}
+          onChange={(e) => handleChange("financeEmail", e.target.value)}
+        />
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <InputField
           label="Property Description"
           type="textarea"
@@ -37,7 +50,7 @@ export default function StepOne({ data, onUpdate }) {
           value={data.description}
           onChange={(e) => handleChange("description", e.target.value)}
         />
-      </div>
+      </div> */}
 
       <hr className="my-6 border-gray-300" />
 
