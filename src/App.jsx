@@ -1,7 +1,7 @@
 import { useState } from "react";
 import StepIndicator from "./components/StepIndicator";
 import StepOne from "./components/StepOne";
-import PropertyImagesForm from "./components/stepTwo";
+import PropertyImagesForm from "./components/StepTwo";
 import FinishStep from "./components/StepThree";
 import FinalThankYou from "./components/EndStep";
 
